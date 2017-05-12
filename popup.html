@@ -1,0 +1,40 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>PunSched Popup</title>
+    <style>
+      body {
+        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+        font-size: 11pt;
+        width: 400px;
+      }
+      button {
+        width: 100%;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: darkgreen;
+        color: white;
+        font-size: 18pt;
+      }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+
+  </head>
+  <body>
+    <button id="button">Click Me</button>
+    <br>
+    <p id="text">Test</p>
+    <script src="popup.js"></script>
+  </body>
+</html>
