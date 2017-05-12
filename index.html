@@ -4,27 +4,89 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <meta name="description" content="A political revolution">
+    <meta name="author" content="Devin Hartzell">
+    <link rel="icon" href="">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>» SchedEx</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/stylesheet.css" />
 
-    <!-- Custom styles for this template -->
-    <link href="starter-template.css" rel="stylesheet">
   </head>
-
   <body>
 
+    <nav class="navbar navbar-toggleable-xs navbar-inverse bg-inverse fixed-top">
+      <a class="navbar-brand" href="#">SchedEx » <small>By Punahou Students for Punahou Students</small></a>
+
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">For Punahou Students<span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="filler">
+      Woah.
+    </div>
+    <div class="container">
+      <div class="row">
+        <table class="col-sm-8">
+          <tbody id ="schedTbl">
+            <tr>
+              <td></td>
+              <th>A</th>
+              <th>B</th>
+              <th>C</th>
+              <th>D</th>
+              <th>E</th>
+              <th>F</th>
+            </tr>
+          </tbody>
+
+        </table>
+
+        <div class="col-sm-4">
+          <div class="card" style="margin-top:10px;">
+            <div class="card-block">
+              <form>
+                <div class="form-group row">
+                  <label for="className" class="col-5 col-form-label">Class Name</label>
+                  <div class="col-7">
+                    <input class="form-control" type="search" value="" id="className" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="roomID" class="col-5 col-form-label">Room</label>
+                  <div class="col-7">
+                    <input class="form-control" type="search" value="" id="roomID" />
+                  </div>
+                </div>
+
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="ADay" 
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
+
+
+
+    <!-- Bootstrap & Req'd Dependencies -->
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+
+    <script src="js/sched.js"></script>
   </body>
 </html>
