@@ -6,8 +6,14 @@ var currentURL = "";
 var button = document.getElementById('button');
 var text = document.getElementById('text');
 
+var interval = setInterval(function() {
+  updateUrl();
+  setTimeout(update, 75);
+}, 300);
+
 button.addEventListener('click', function() {
   update();
+  console.log("hello")
 })
 
 function updateUrl() {
@@ -40,12 +46,17 @@ function update() {
   console.log("update")
   // If not on MyBackpack, go to MyBackpack
   if (!(currentURL.includes("https://mybackpack.punahou.edu"))) {
-    goto("https://mybackpack.punahou.edu");
+    goto("https://mybackpack.punahou.edu/SeniorApps/logOff.do?dispatch=logOff");
   } else {
     // If not logged in yet
     if (currentURL.includes("loginCenter")) {
       updateMessage("Please log in with the proper information. This is not tracked.");
-    } else if (currentURL.includes("SeniorApps/facelets/home/home.xhtml")) {}
+    } else if (currentURL.includes("SeniorApps/facelets/home/home.xhtml")) {
+      goto("https://mybackpack.punahou.edu/SeniorApps/studentParent/schedule.faces?selectedMenuId=true");
+    } else if (currentURL.includes("schedule.faces?selectedMenuId=true")) {
+      // Here is the fun part
+
+    }
   }
 }
 
@@ -62,4 +73,8 @@ function updateMessage(message) {
   text.innerHTML = message;
 }
 
-setInterval(updateUrl, 500);
+function scrape() {
+  chrome.tabs.executeScript({
+    file: "scrape.js"
+  })
+}
