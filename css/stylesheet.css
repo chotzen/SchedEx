@@ -4,17 +4,23 @@
 }
 
 table {
-  width: 100%;
+
   margin: 0;
   padding: 0;
   border: 2px solid black;
   margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 td, th {
   text-align: center;
+
 }
 
 .timeslot:hover {
   border: 1px solid black;
+}
+
+.form-group {
+  margin-bottom: 2px !important;
 }
