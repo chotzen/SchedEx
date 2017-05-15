@@ -53,82 +53,125 @@
 
         <div class="col-sm-4">
           <div style="position:fixed;">
-          <div class="card" style="margin-top:10px;width:359px;">
-            <div class="card-block">
-              <form>
-                <div class="form-group row">
-                  <label for="class-name" class="col-5 col-form-label">Class Name</label>
-                  <div class="col-7">
-                    <input class="form-control" type="search" value="" id="class-name" maxlength="10"/>
+            <div class="card" style="margin-top:10px;width:359px;">
+              <div class="card-block">
+                <form>
+                  <div class="form-group row">
+                    <label for="class-name" class="col-5 col-form-label">Class Name</label>
+                    <div class="col-7">
+                      <input class="form-control" type="search" value="" id="class-name" maxlength="10"/>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group row">
-                  <label for="room-loc" class="col-5 col-form-label">Room</label>
-                  <div class="col-7">
-                    <input class="form-control" type="search" value="" id="room-loc" maxlength="10"/>
+                  <div class="form-group row">
+                    <label for="room-loc" class="col-5 col-form-label">Room</label>
+                    <div class="col-7">
+                      <input class="form-control" type="search" value="" id="room-loc" maxlength="10"/>
+                    </div>
                   </div>
-                </div>
-                <br />
-                <div class="form-group row">
-                  <label for="start-time" class="col-5 col-form-label">Start Time</label>
-                  <div class="col-7">
-                    <select class="form-control custom-select" id="start-time" disabled>
+                  <br />
+                  <div class="form-group row">
+                    <label for="start-time" class="col-5 col-form-label">Start Time</label>
+                    <div class="col-7">
+                      <select class="form-control custom-select" id="start-time" disabled>
 
-                    </select>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group row">
-                  <label for="end-time" class="col-5 col-form-label">End Time</label>
-                  <div class="col-7">
-                    <select class="form-control custom-select" id="end-time" disabled>
+                  <div class="form-group row">
+                    <label for="end-time" class="col-5 col-form-label">End Time</label>
+                    <div class="col-7">
+                      <select class="form-control custom-select" id="end-time" disabled>
 
-                    </select>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div id="day-select" style="margin-top:7px">
+                  <div id="day-select" style="margin-top:7px">
 
-                </div>
-                <div id="colorpicker-div" class="input-group colorpicker-component">
-                    <input id="colorpicker" type="text" value="#00AABB" class="form-control" disabled />
-                    <span class="input-group-addon"><i></i></span>
-                </div>
-              </form>
+                  </div>
+                  <div id="colorpicker-div" class="input-group colorpicker-component">
+                      <input id="colorpicker" type="text" value="#00AABB" class="form-control" disabled />
+                      <span class="input-group-addon"><i></i></span>
+                  </div>
+                </form>
 
-
-            </div>
-          </div>
-
-          <div class="card" style="margin-top:10px; position:fixed; width:auto">
-            <div class="card-block">
-              <div class="btn-group" role="group" aria-label="Options">
-              <button type="button" class="btn btn-warning" onclick="reset();">Reset</button>
-              <button type="button" class="btn btn-danger" onclick="deleteClass();">Delete</button>
-
-              <div class="btn-group dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" type="button" id="save-menu"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Save</button>
-                <div class="dropdown-menu">
-                  <button class="dropdown-item" type="button" id="gcal">Google Calendar</button>
-                  <button class="dropdown-item" type="button" id="pdf">PDF</button>
-                  <button class="dropdown-item" type="button" id="save-schem">Schematic</button>
-                </div>
-              </div>
-
-              <div class="btn-group dropdown">
-                <button type="button" class="btn btn-success dropdown-toggle" type="button" id="save-menu"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Load</button>
-                <div class="dropdown-menu">
-                  <a href="/chrome"><button href="/chrome" class="dropdown-item" type="button" id="mybackpack">Automatic</button></a>
-                  <button class="dropdown-item" type="button" id="load-schem">Schematic</button>
-                </div>
-              </div>
 
               </div>
             </div>
-          </div>
+
+            <div class="card" style="margin-top:10px; position:fixed; width:auto">
+              <div class="card-block">
+                <div class="btn-group" role="group" aria-label="Options">
+                  <button type="button" class="btn btn-warning" onclick="reset();">Reset</button>
+                  <button type="button" class="btn btn-danger" onclick="deleteClass();">Delete</button>
+
+                  <div class="btn-group dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" type="button" id="save-menu"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Save</button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item" type="button" id="gcal" disabled>Google Calendar</button>
+                      <button class="dropdown-item" type="button" id="pdf" onclick="savePDF()">PDF</button>
+                      <button class="dropdown-item" type="button" id="save-schem" data-toggle="modal" data-target="#save-schem-modal">Schematic</button>
+                    </div>
+                  </div>
+
+                  <div class="btn-group dropdown">
+                    <button type="button" class="btn btn-success dropdown-toggle" type="button" id="save-menu"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Load</button>
+                    <div class="dropdown-menu">
+                      <a href="/chrome"><button href="/chrome" class="dropdown-item" type="button" id="mybackpack" disabled>Automatic</button></a>
+                      <button class="dropdown-item" type="button" id="load-schem" data-toggle="modal" data-target="#load-schem-modal">Schematic</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- Save Schematic Modal -->
+    <div class="modal fade" id="save-schem-modal" tabindex="-1" role="dialog" aria-labelledby="save-schem-title" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="save-schem-title">Save Schematic</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <small>Copy this text and save it somewhere. You can load it later to make changes.</small>
+            <code id="schem-code"></code>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load Schematic Modal -->
+    <div class="modal fade" id="load-schem-modal" tabindex="-1" role="dialog" aria-labelledby="load-schem-title" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="load-schem-title">Save Schematic</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <small>Paste your saved schematic code here to load it.</small>
+            <form>
+              <textarea type="text" class="form-control" id="load-schem-text" style="height:300px;"></textarea>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="doSchem();">OK</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -139,6 +182,10 @@
 
     <script src="js/sched.js"></script>
     <script src="js/bootstrap-colorpicker.min.js"></script>
+    <script type="text/javascript" src="js/jspdf/jspdf.js"></script>
+    <script type="text/javascript" src="js/jspdf/filesaver.js"></script>
+    <script type="text/javascript" src="js/jspdf/split_text_to_size.js"></script>
+    <script type="text/javascript" src="js/jspdf/standard_fonts_metrics.js"></script>
     <script>
         $(function() {
             $('#colorpicker-div').colorpicker();

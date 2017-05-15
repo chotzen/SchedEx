@@ -13,6 +13,8 @@ var startTimeSelect = document.getElementById("start-time");
 var endTimeSelect = document.getElementById("end-time")
 var colorpicker = document.getElementById("colorpicker")
 var priority = document.getElementById("priority");
+var schemCode = document.getElementById("schem-code")
+var loadSchem = document.getElementById("load-schem-text")
 var daycbx = new Array(6);
 
 function Class(name, location, days, color, startTime, endTime /* Last occupied timeslot */) {
@@ -73,6 +75,15 @@ function start() {
   }, 100);
   document.addEventListener('click', onClick);
   document.addEventListener('click', updateSelectors);
+  if (getParameterByName("sched")) {
+    var data = JSON.parse(getParameterByName("sched"));
+    classList = [];
+    for (var i = 0; i < data.length; i++) {
+      var m = data[i];
+      classList.push(new Class(m.name, m.location, m.days, randomColor(), m.startTime, m.endTime));
+    }
+
+  }
 }
 
 // Sets up schedule grid
@@ -244,6 +255,8 @@ function updateView() {
       }
     }
   }
+  var k = JSON.stringify(classList);
+  schemCode.innerHTML = JSON.stringify(k);
 
 
 
@@ -331,6 +344,60 @@ function saveInfo() {
   }
 }
 
+function savePDF() {
+  var pdf = new jsPDF('p', 'pt', 'letter');
+  // Headers
+
+  pdf.setDrawColor(0)
+  pdf.setFillColor(255)
+  pdf.rect(20,30,570,20, "F")
+  pdf.setFont("helvetica")
+
+  for (var i = 0; i < 32; i++) {
+    if (i % 2 !== 0) {
+      pdf.setFillColor(255)
+    } else {
+      pdf.setFillColor(230)
+    }
+    pdf.setDrawColor(255)
+    pdf.rect(20, 50 + (i * 20), 570, 20, "F")
+    pdf.text(time(i), 45, 66 + (i * 20), "center")
+  }
+
+  for (var i = 0; i < 6; i++) {
+    pdf.text(letters[i], 107 + (86 * i), 40)
+  }
+  pdf.setDrawColor(0);
+  pdf.setLineWidth(1.5);
+  pdf.line(20, 50, 590, 50);
+
+
+
+  for (var i = 0; i < classList.length; i++) {
+    var color = classList[i].color;
+    var red = parseInt(color.substring(1, 3), 16)
+    var green = parseInt(color.substring(3, 5), 16)
+    var blue = parseInt(color.substring(5), 16)
+    var white = (red + green + blue)/3 > 150
+    for (var di = 0; di < classList[i].days.length; di++) {
+      pdf.setFillColor(red, green, blue)
+      pdf.rect(68 + (classList[i].days[di] * 87), 50 + (classList[i].startTime * 20), 87, 20 * (classList[i].endTime - classList[i].startTime + 1), "F")
+      var topaverage = Math.floor((classList[i].startTime + classList[i].endTime) / 2);
+      if (white) {
+        pdf.setTextColor(0)
+      } else {
+        pdf.setTextColor(255)
+      }
+      pdf.setFontSize(14)
+      pdf.text(classList[i].name, 111 + (classList[i].days[di] * 87), 67 + (topaverage* 20), "center")
+      pdf.text(classList[i].location, 111 + (classList[i].days[di] * 87), 67 + ((topaverage + 1)* 20), "center")
+    }
+  }
+
+
+  pdf.save('Schedule.pdf')
+}
+
 // Checks if a color is considered dark enough to have white text
 function checkDark(color) {
     var red = parseInt(color.substring(1, 3), 16);
@@ -364,6 +431,19 @@ function getBox(d) {
   return document.getElementById("box-" + d);
 }
 
+function doSchem() {
+  classList = [];
+  var value = loadSchem.value;
+  var data = JSON.parse(value);
+  for (var i = 0; i < data.length; i++) {
+    var m = data[i];
+    classList.push(new Class(m.name, m.location, m.days, m.color, m.startTime, m.endTime));
+  }
+  selClass = undefined;
+  disableAll(true);
+  updateView();
+}
+
 function reset() {
   classList = [];
   selClass = undefined;
@@ -380,4 +460,14 @@ function deleteClass() {
 
 function findSel(e) {
   return (e === selClass);
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
