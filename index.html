@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
     integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="css/stylesheet.css" />
+    <link rel="stylesheet" href="css/bootstrap-colorpicker.min.css" />
+
+
 
   </head>
   <body>
@@ -49,19 +52,20 @@
         </table>
 
         <div class="col-sm-4">
-          <div class="card" style="margin-top:10px; position:fixed;">
+          <div style="position:fixed;">
+          <div class="card" style="margin-top:10px;width:359px;">
             <div class="card-block">
               <form>
                 <div class="form-group row">
                   <label for="class-name" class="col-5 col-form-label">Class Name</label>
                   <div class="col-7">
-                    <input class="form-control" type="search" value="" id="class-name" />
+                    <input class="form-control" type="search" value="" id="class-name" maxlength="10"/>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="room-loc" class="col-5 col-form-label">Room</label>
                   <div class="col-7">
-                    <input class="form-control" type="search" value="" id="room-loc"/>
+                    <input class="form-control" type="search" value="" id="room-loc" maxlength="10"/>
                   </div>
                 </div>
                 <br />
@@ -84,10 +88,47 @@
                 <div id="day-select" style="margin-top:7px">
 
                 </div>
+                <div id="colorpicker-div" class="input-group colorpicker-component">
+                    <input id="colorpicker" type="text" value="#00AABB" class="form-control" disabled />
+                    <span class="input-group-addon"><i></i></span>
+                </div>
               </form>
+
+
             </div>
           </div>
+
+          <div class="card" style="margin-top:10px; position:fixed; width:auto">
+            <div class="card-block">
+              <div class="btn-group" role="group" aria-label="Options">
+              <button type="button" class="btn btn-warning">Reset</button>
+              <button type="button" class="btn btn-danger">Delete</button>
+
+              <div class="btn-group dropdown">
+                <button type="button" class="btn btn-primary dropdown-toggle" type="button" id="save-menu"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Save</button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item" type="button" id="gcal">Google Calendar</button>
+                  <button class="dropdown-item" type="button" id="pdf">PDF</button>
+                  <button class="dropdown-item" type="button" id="save-schem">Schematic</button>
+                </div>
+              </div>
+
+              <div class="btn-group dropdown">
+                <button type="button" class="btn btn-success dropdown-toggle" type="button" id="save-menu"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Load</button>
+                <div class="dropdown-menu">
+                  <a href="/chrome"><button href="/chrome" class="dropdown-item" type="button" id="mybackpack">Automatic</button></a>
+                  <button class="dropdown-item" type="button" id="load-schem">Schematic</button>
+                </div>
+              </div>
+
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
+
       </div>
     </div>
 
@@ -97,5 +138,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
     <script src="js/sched.js"></script>
+    <script src="js/bootstrap-colorpicker.min.js"></script>
+    <script>
+        $(function() {
+            $('#colorpicker-div').colorpicker();
+        });
+    </script>
   </body>
 </html>
