@@ -72,6 +72,7 @@ function start() {
     updateView();
   }, 100);
   document.addEventListener('click', onClick);
+  document.addEventListener('click', updateSelectors);
 }
 
 // Sets up schedule grid
@@ -112,8 +113,10 @@ function setupRight() {
   for (var i = 0; i < 32; i++) {
     var soption = document.createElement("option");
     soption.innerHTML = time(i);
+    soption.id = "start-" + i;
     var eoption = document.createElement("option");
     eoption.innerHTML = time(i+1);
+    eoption.id = "end-" + i;
     startTimeSelect.appendChild(soption);
     endTimeSelect.appendChild(eoption);
   }
@@ -167,6 +170,7 @@ function time(int) {
   return hr + ":" + min;
 }
 
+// Gets the class at a timeslot. Returns false if nonexistent
 function getClass(r, c) {
   for (var i = 0; i < classList.length; i++) {
     for (var m = 0; m < classList[i].timeSlotDays().length; m++) {
@@ -179,6 +183,7 @@ function getClass(r, c) {
   return false;
 }
 
+// Stuff to do when the mouse clicks
 function onClick(e) {
   e = e || window.event;
   var target = e.target || e.srcElement;
@@ -205,12 +210,18 @@ function onClick(e) {
   }
 }
 
+// Updates the view of the schedule
 function updateView() {
   for (var i = 0; i < 32; i++) {
     for (var j = 0; j < 6; j++) {
       getCell(i, j).innerHTML = "";
       if (getClass(i, j)) {
         getCell(i, j).style.backgroundColor = getClass(i, j).color;
+        if (checkDark(getClass(i, j).color)) {
+          getCell(i, j).style.color = "white";
+        } else {
+          getCell(i, j).style.color = "black";
+        }
       } else {
         getCell(i, j).style.backgroundColor = "transparent";
       }
@@ -219,15 +230,26 @@ function updateView() {
 
   for (var i = 0; i < classList.length; i++) {
 
-    var uppermid = Math.floor((classList[i].startTime + classList[i].endTime - 1)/2);
-    var lowermid = uppermid + 1;
-    for (var j = 0; j < classList[i].days.length; j++) {
-      getCell(uppermid, classList[i].days[j]).innerHTML = classList[i].name;
-      getCell(lowermid, classList[i].days[j]).innerHTML = classList[i].location;
+    if (classList[i].endTime - classList[i].startTime === 0) {
+      var val = classList[i].name.substring(0, 5) + " " + classList[i].location.substring(0, 4);
+      for (var j = 0; j < classList[i].days.length; j++) {
+        getCell(classList[i].startTime, classList[i].days[j]).innerHTML = val;
+      }
+    } else if (classList[i].endTime - classList[i].startTime > 0) {
+      var uppermid = Math.floor((classList[i].startTime + classList[i].endTime - 1)/2);
+      var lowermid = uppermid + 1;
+      for (var j = 0; j < classList[i].days.length; j++) {
+        getCell(uppermid, classList[i].days[j]).innerHTML = classList[i].name;
+        getCell(lowermid, classList[i].days[j]).innerHTML = classList[i].location;
+      }
     }
   }
+
+
+
 }
 
+// Updates the information on the right side
 function updateRight() {
   for (var i = 0; i < 6; i++) {
     getBox(i).checked = false;
@@ -249,15 +271,56 @@ function updateRight() {
       getBox(selClass.days[i]).checked = true;
     }
   }
+  updateSelectors();
 }
 
+function conflictBefore(ind) {
+  for (var i = ind; i < selClass.startTime; i++) {
+    if (hasConflict(i)) {
+      return true;
+    }
+  } return false;
+}
+
+function conflictAfter(ind) {
+  for (var i = ind; i > selClass.endTime; i--) {
+    if (hasConflict(i)) {
+      return true;
+    }
+  } return false;
+}
+
+function hasConflict(time) {
+  for (var k = 0; k < selClass.days.length; k++) {
+    if (getClass(time, selClass.days[k])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function updateSelectors() {
+  if (selClass) {
+    if ($("#start-time").is(":focus") || $("#end-time").is(":focus")) {
+      console.log("updating selectors");
+      for (var i = 0; i < 32; i++) {
+        document.getElementById("start-" + i).disabled = conflictBefore(i) || i > selClass.endTime;
+        document.getElementById("end-" + i).disabled = conflictAfter(i) || i < selClass.startTime;
+      }
+    } else {
+
+    }
+  }
+}
+
+// Saves the information from the right
 function saveInfo() {
   if (selClass != undefined) {
     selClass.name = className.value;
     selClass.location = roomLoc.value;
     selClass.startTime = startTimeSelect.selectedIndex;
     selClass.endTime = endTimeSelect.selectedIndex;
-    selClass.color = colorpicker.value;
+    selClass.color = $("#colorpicker").data('colorpicker').color.toHex();
     var days = [];
     for (var i = 0; i < 6; i++) {
       if (getBox(i).checked) {
@@ -268,6 +331,15 @@ function saveInfo() {
   }
 }
 
+// Checks if a color is considered dark enough to have white text
+function checkDark(color) {
+    var red = parseInt(color.substring(1, 3), 16);
+    var green = parseInt(color.substring(3, 5), 16);
+    var blue = parseInt(color.substring(5), 16);
+    return ((red + green + blue) / 3 < 145);
+}
+
+// Generates a random hex color
 function randomColor() {
   var str = "#";
   for (var i = 0; i < 6; i++) {
@@ -276,14 +348,36 @@ function randomColor() {
   return str;
 }
 
+// Returns a Slot object from a DOM id string
 function stringToSlot(str) {
   var split = str.split("-");
   return new Slot(parseInt(split[1]), parseInt(split[2]));
 }
 
+// Finds the DOM cell at coordinates
 function getCell(r, c) {
   return document.getElementById("cell-" + r + "-" + c);
 }
+
+// Gets the letter day checkbox at a numeric value
 function getBox(d) {
   return document.getElementById("box-" + d);
+}
+
+function reset() {
+  classList = [];
+  selClass = undefined;
+  disableAll(true);
+}
+
+function deleteClass() {
+  classList.splice(classList.findIndex(findSel), 1);
+  selClass = undefined;
+  updateRight();
+  disableAll(true);
+
+} // findIndex()
+
+function findSel(e) {
+  return (e === selClass);
 }
