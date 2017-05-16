@@ -34,8 +34,9 @@ function Class(name, location, days, color, startTime, endTime /* Last occupied 
   this.timeSlotDays = function() {
     var ret = [];
     for (var i = 0; i < this.days.length; i++) {
-      for (var j = 0; j < this.timeSlots().length; j++) {
-        ret.push(new Slot(this.timeSlots()[j], this.days[i]));
+      var timeslots = this.timeSlots();
+      for (var j = 0; j < timeslots.length; j++) {
+        ret.push(new Slot(timeslots[j], this.days[i]));
       }
     }
     return ret;
@@ -43,8 +44,9 @@ function Class(name, location, days, color, startTime, endTime /* Last occupied 
   this.cells = function() {
     var ret = [];
     for (var i = 0; i < this.days.length; i++) {
-      for (var j = 0; j < this.timeSlots().length; j++) {
-        ret.push(getCell(this.timeSlots()[j], this.days[i]));
+      var timeslots = this.timeSlots();
+      for (var j = 0; j < timeslots.length; j++) {
+        ret.push(getCell(timeslots[j], this.days[i]));
       }
     }
     return ret;
@@ -72,7 +74,7 @@ function start() {
 
     saveInfo();
     updateView();
-  }, 100);
+  }, 300);
   document.addEventListener('click', onClick);
   document.addEventListener('click', updateSelectors);
   if (getParameterByName("sched")) {

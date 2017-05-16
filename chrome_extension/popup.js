@@ -42,6 +42,8 @@ chrome.webNavigation.onCompleted.addListener(update, {
   }]
 })
 
+var scraped = false;
+
 function update() {
   console.log("update")
   // If not on MyBackpack, go to MyBackpack
@@ -54,10 +56,18 @@ function update() {
     } else if (currentURL.includes("SeniorApps/facelets/home/home.xhtml")) {
       goto("https://mybackpack.punahou.edu/SeniorApps/studentParent/schedule.faces?selectedMenuId=true");
     } else if (currentURL.includes("schedule.faces?selectedMenuId=true")) {
+      if (!scraped) setTimeout(scrape, 50);
+      scraped = true;
       // Here is the fun part
 
     }
   }
+}
+
+function scrape() {
+  chrome.tabs.executeScript({
+    file: "scrape.js"
+  })
 }
 
 function goto(URL) {
@@ -73,8 +83,10 @@ function updateMessage(message) {
   text.innerHTML = message;
 }
 
-function scrape() {
-  chrome.tabs.executeScript({
-    file: "scrape.js"
-  })
-}
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.scraped) {
+      chrome.tabs.create({url: "http://localhost:9001/?sched=" + request.scraped});
+    }
+  }
+)
