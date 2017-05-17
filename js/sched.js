@@ -1,5 +1,6 @@
 var letters = ["A", "B", "C", "D", "E", "F"];
 var hex = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+var goodcolors = ["#c11b1b", "#9b8a0a", "#476d00", "#037a46", "#078a96", "#1f076d", "#7c0673", "#960d3b"];
 
 var classList = [];
 var selClass = undefined;
@@ -80,11 +81,24 @@ function start() {
   if (getParameterByName("sched")) {
     var data = JSON.parse(getParameterByName("sched"));
     classList = [];
+    var colors = 0;
     for (var i = 0; i < data.length; i++) {
       var m = data[i];
-      classList.push(new Class(m.name, m.location, m.days, randomColor(), m.startTime, m.endTime));
+      var c = randomColor()
+      if (m.name.charAt(m.name.length - 1) === " ") {
+        m.name = m.name.substring(0, m.name.length - 1);
+      }
+      if (m.name === "ASSEMBLY" || m.name === "CHAPEL" || m.name === "LONG AP") {
+        c = "#2b2b2b";
+      } else {
+        if (colors < goodcolors.length) {
+          c = goodcolors[colors];
+          colors++;
+          console.log("Gave color " + colors + " to " + m.name);
+        }
+      }
+      classList.push(new Class(m.name, m.location, m.days, c, m.startTime, m.endTime));
     }
-
   }
 }
 
@@ -354,50 +368,53 @@ function savePDF() {
   pdf.setFillColor(255)
   pdf.rect(20,30,570,20, "F")
   pdf.setFont("helvetica")
+  pdf.setFontSize(12);
 
   for (var i = 0; i < 32; i++) {
     if (i % 2 !== 0) {
-      pdf.setFillColor(255)
+      pdf.setFillColor(255);
     } else {
-      pdf.setFillColor(230)
+      pdf.setFillColor(230);
     }
-    pdf.setDrawColor(255)
-    pdf.rect(20, 50 + (i * 20), 570, 20, "F")
-    pdf.text(time(i), 45, 66 + (i * 20), "center")
+    pdf.setDrawColor(255);
+    pdf.rect(20, 50 + (i * 20), 570, 20, "F");
+    pdf.text(time(i), 45, 66 + (i * 20), "center");
   }
-
+  pdf.setFontSize(15);
   for (var i = 0; i < 6; i++) {
-    pdf.text(letters[i], 107 + (86 * i), 40)
+    pdf.text(letters[i], 107 + (86 * i), 40);
+  }
+  pdf.setFontSize(12);
+  pdf.setFontType("normal");
+
+
+
+
+  for (var i = 0; i < classList.length; i++) {
+    var color = classList[i].color;
+    var red = parseInt(color.substring(1, 3), 16);
+    var green = parseInt(color.substring(3, 5), 16);
+    var blue = parseInt(color.substring(5), 16);
+    var white = (red + green + blue)/3 > 150;
+    for (var di = 0; di < classList[i].days.length; di++) {
+      pdf.setFillColor(red, green, blue);
+      pdf.rect(68 + (classList[i].days[di] * 87), 50 + (classList[i].startTime * 20), 87, 20 * (classList[i].endTime - classList[i].startTime + 1), "F");
+      var topaverage = Math.floor((classList[i].startTime + classList[i].endTime) / 2);
+      if (white) {
+        pdf.setTextColor(0);
+      } else {
+        pdf.setTextColor(255);
+      }
+      pdf.text(classList[i].name, 111 + (classList[i].days[di] * 87), 67 + (topaverage* 20), "center");
+      pdf.text(classList[i].location, 111 + (classList[i].days[di] * 87), 67 + ((topaverage + 1)* 20), "center");
+    }
   }
   pdf.setDrawColor(0);
   pdf.setLineWidth(1.5);
   pdf.line(20, 50, 590, 50);
 
 
-
-  for (var i = 0; i < classList.length; i++) {
-    var color = classList[i].color;
-    var red = parseInt(color.substring(1, 3), 16)
-    var green = parseInt(color.substring(3, 5), 16)
-    var blue = parseInt(color.substring(5), 16)
-    var white = (red + green + blue)/3 > 150
-    for (var di = 0; di < classList[i].days.length; di++) {
-      pdf.setFillColor(red, green, blue)
-      pdf.rect(68 + (classList[i].days[di] * 87), 50 + (classList[i].startTime * 20), 87, 20 * (classList[i].endTime - classList[i].startTime + 1), "F")
-      var topaverage = Math.floor((classList[i].startTime + classList[i].endTime) / 2);
-      if (white) {
-        pdf.setTextColor(0)
-      } else {
-        pdf.setTextColor(255)
-      }
-      pdf.setFontSize(14)
-      pdf.text(classList[i].name, 111 + (classList[i].days[di] * 87), 67 + (topaverage* 20), "center")
-      pdf.text(classList[i].location, 111 + (classList[i].days[di] * 87), 67 + ((topaverage + 1)* 20), "center")
-    }
-  }
-
-
-  pdf.save('Schedule.pdf')
+  pdf.save('Schedule.pdf');
 }
 
 // Checks if a color is considered dark enough to have white text

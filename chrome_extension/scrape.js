@@ -8,7 +8,7 @@ function Class(name, location, days, color, startTime, endTime /* Last occupied 
   this.startTime = startTime;
   this.endTime = endTime;
 }
-console.log('loded')
+
 scrape();
 
 function scrape() {
@@ -22,8 +22,14 @@ function scrape() {
 
     if (!(coursename === "CLASS DEANS' EMAIL" || coursename.includes("ASSEM")
         || coursename.includes("CHAPEL") || coursename.includes("CITIZENSHIP") || coursename.includes("EXTENDED"))) {
+
+      var title = coursename.substring(0, 3);
+      if (coursename.lastIndexOf(title) > 0) {
+        coursename = coursename.substring(0, coursename.lastIndexOf(title) - 1);
+      }
       coursename = coursename.substring(0, 10);
-      console.log("---" + coursename + "---");
+
+
 
       var room = tbody.querySelector("tr:nth-child("+i+") > td:nth-child(4)").innerHTML;
       console.log(room)
