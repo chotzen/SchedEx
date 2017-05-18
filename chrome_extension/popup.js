@@ -42,7 +42,7 @@ function update() {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.scraped) {
-    chrome.tabs.create({url: "http://localhost:9001/?sched=" + request.scraped});
+    chrome.tabs.create({url: "http://devinhartzell.com/sched/?sched=" + request.scraped});
   }
   if (request.scrape) {
     scrape();
