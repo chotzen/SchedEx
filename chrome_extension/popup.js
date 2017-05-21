@@ -17,12 +17,18 @@ function updateUrl() {
     console.assert(typeof url == 'string', 'tab.url should be a string');
     currentURL = url;
     chrome.runtime.sendMessage({currentActiveURL: url});
+    console.log(currentURL);
   });
 }
 
 setInterval(updateUrl, 200);
 
 function update() {
+  if (currentURL.includes("schedule.faces")) {
+    scrape();
+    console.log("scraping");
+  }
+  console.log("update");
   if (!(currentURL.includes("https://mybackpack.punahou.edu" || currentURL.includes("localhost") || currentURL.includes("hartzell")))) {
     goto("https://mybackpack.punahou.edu/SeniorApps/logOff.do?dispatch=logOff");
   } else {
@@ -31,10 +37,6 @@ function update() {
       updateMessage("Please log in with the proper information. This is not tracked.");
     } else if (currentURL.includes("SeniorApps/facelets/home/home.xhtml")) {
       goto("https://mybackpack.punahou.edu/SeniorApps/studentParent/schedule.faces?selectedMenuId=true");
-    } else if (currentURL.includes("schedule.faces?selectedMenuId=true")) {
-      scrape();
-      // Here is the fun part
-
     }
   }
 }
@@ -60,7 +62,7 @@ function goto(URL) {
 
 
 function scrape() {
-  if (currentURL === "https://mybackpack.punahou.edu/SeniorApps/studentParent/schedule.faces?selectedMenuId=true") {
+  if (currentURL.includes("https://mybackpack.punahou.edu/SeniorApps/studentParent/schedule.faces")) {
     console.log("Scraping...")
     chrome.tabs.executeScript({
       file: "scrape.js"

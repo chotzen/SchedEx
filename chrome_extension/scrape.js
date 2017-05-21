@@ -21,7 +21,7 @@ function scrape() {
     var coursename = tbody.querySelector("tr:nth-child("+i+") > td:nth-child(1)").innerHTML;
 
     if (!(coursename === "CLASS DEANS' EMAIL" || coursename.includes("ASSEM")
-        || coursename.includes("CHAPEL") || coursename.includes("CITIZENSHIP") || coursename.includes("EXTENDED"))) {
+        || coursename.includes("CHAPEL") || coursename.includes("CITIZENSHIP") || coursename.includes("EXTENDED") || coursename.charAt(0) === ".")) {
 
       var title = coursename.substring(0, 3);
       if (coursename.lastIndexOf(title) > 0) {
