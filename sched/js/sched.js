@@ -1,13 +1,17 @@
+// General reference variables
 var letters = ["A", "B", "C", "D", "E", "F"];
 var hex = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 var goodcolors = ["#c11b1b", "#9b8a0a", "#476d00", "#037a46", "#078a96", "#1f076d", "#7c0673", "#960d3b"];
 
+// List of all class objects
 var classList = [];
+
+// Currently selected class
 var selClass = undefined;
 
+// References to elements in the document to be read and changed later
 var schedTbl = document.getElementById("schedTbl");
 var cols = new Array(6);
-
 var className = document.getElementById("class-name");
 var roomLoc = document.getElementById("room-loc");
 var startTimeSelect = document.getElementById("start-time");
@@ -18,6 +22,8 @@ var schemCode = document.getElementById("schem-code")
 var loadSchem = document.getElementById("load-schem-text")
 var daycbx = new Array(6);
 
+
+// Definition of a class (its properties)
 function Class(name, location, days, color, startTime, endTime /* Last occupied timeslot */) {
   this.name = name;
   this.location = location;
@@ -54,13 +60,14 @@ function Class(name, location, days, color, startTime, endTime /* Last occupied 
   }
 }
 
+// A way to help keep track of timeslots
 function Slot(r, c) {
   this.r = r;
   this.c = c;
 }
 
 start();
-// Code to be executed at start
+// Code to be executed when page loads
 function start() {
   setup();
   setupRight();
@@ -78,6 +85,8 @@ function start() {
   }, 300);
   document.addEventListener('click', onClick);
   document.addEventListener('click', updateSelectors);
+
+  // Load schematic from url query
   if (getParameterByName("sched")) {
     var data = JSON.parse(getParameterByName("sched"));
     classList = [];
@@ -273,9 +282,6 @@ function updateView() {
   }
   var k = JSON.stringify(classList);
   schemCode.innerHTML = JSON.stringify(k);
-
-
-
 }
 
 // Updates the information on the right side
@@ -303,6 +309,7 @@ function updateRight() {
   updateSelectors();
 }
 
+// Checks if there is a conflict before a certain time
 function conflictBefore(ind) {
   for (var i = ind; i < selClass.startTime; i++) {
     if (hasConflict(i)) {
@@ -311,6 +318,7 @@ function conflictBefore(ind) {
   } return false;
 }
 
+// Checks if there is a conflict after a certain time
 function conflictAfter(ind) {
   for (var i = ind; i > selClass.endTime; i--) {
     if (hasConflict(i)) {
@@ -319,6 +327,7 @@ function conflictAfter(ind) {
   } return false;
 }
 
+// Checks if a class would theoretically have a conflict at a time.
 function hasConflict(time) {
   for (var k = 0; k < selClass.days.length; k++) {
     if (getClass(time, selClass.days[k])) {
@@ -328,6 +337,7 @@ function hasConflict(time) {
   return false;
 }
 
+// Updates the dropdowns to select start and end times to reflect conflicting classes
 function updateSelectors() {
   if (selClass) {
     if ($("#start-time").is(":focus") || $("#end-time").is(":focus")) {
@@ -342,7 +352,7 @@ function updateSelectors() {
   }
 }
 
-// Saves the information from the right
+// Saves the information from the class editor
 function saveInfo() {
   if (selClass != undefined) {
     selClass.name = className.value;
@@ -360,6 +370,7 @@ function saveInfo() {
   }
 }
 
+// Saves the class schedule as a PDF
 function savePDF() {
   var pdf = new jsPDF('p', 'pt', 'letter');
   // Headers
@@ -386,9 +397,6 @@ function savePDF() {
   }
   pdf.setFontSize(12);
   pdf.setFontType("normal");
-
-
-
 
   for (var i = 0; i < classList.length; i++) {
     var color = classList[i].color;
@@ -450,6 +458,7 @@ function getBox(d) {
   return document.getElementById("box-" + d);
 }
 
+// Loads schematic data
 function doSchem() {
   classList = [];
   var value = loadSchem.value;
@@ -463,12 +472,14 @@ function doSchem() {
   updateView();
 }
 
+// Resets the schedule
 function reset() {
   classList = [];
   selClass = undefined;
   disableAll(true);
 }
 
+// Deletes the selected class
 function deleteClass() {
   classList.splice(classList.findIndex(findSel), 1);
   selClass = undefined;
@@ -477,12 +488,16 @@ function deleteClass() {
 
 } // findIndex()
 
+// Checks if a class is the one being selected
 function findSel(e) {
   return (e === selClass);
 }
 
+// Searches for the url query
 function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
+    if (!url) {
+      url = window.location.href;
+    }
     name = name.replace(/[\[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
