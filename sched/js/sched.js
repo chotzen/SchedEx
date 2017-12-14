@@ -1,7 +1,7 @@
 // General reference variables
 var letters = ["A", "B", "C", "D", "E", "F"];
 var hex = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
-var goodcolors = ["#c11b1b", "#9b8a0a", "#476d00", "#037a46", "#078a96", "#1f076d", "#7c0673", "#960d3b"];
+var goodcolors = ["#c11b1b", "#9b8a0a", "#476d00", "#037a46", "#078a96", "#1f076d", "#7c0673", "#960d3b", "#f28b13", "#1387f2"];
 
 // List of all class objects
 var classList = [];

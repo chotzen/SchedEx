@@ -24,7 +24,8 @@ function scrape() {
     var coursename = tbody.querySelector("tr:nth-child("+i+") > td:nth-child(1)").innerHTML;
     // Checks if the class should be included in the schedule
     if (!(coursename === "CLASS DEANS' EMAIL" || coursename.includes("ASSEM")
-        || coursename.includes("CHAPEL") || coursename.includes("CITIZENSHIP") || coursename.includes("EXTENDED") || coursename.charAt(0) === ".")) {
+        || coursename.includes("CHAPEL") || coursename.includes("CITIZENSHIP") ||
+        coursename.includes("EXTENDED") || coursename.charAt(0) === ".")) {
 
       // Clips the title because it sometimes repeats itself
       var title = coursename.substring(0, 3);

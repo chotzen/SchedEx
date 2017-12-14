@@ -62,7 +62,8 @@ function goto(URL) {
 
 
 function scrape() {
-  if (currentURL.includes("https://mybackpack.punahou.edu/SeniorApps/studentParent/schedule.faces")) {
+    console.log("Trying to scrape")
+  if (currentURL.includes("schedule.faces")) {
     console.log("Scraping...")
     chrome.tabs.executeScript({
       file: "scrape.js"
