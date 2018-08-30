@@ -21,7 +21,7 @@ function scrape() {
   // Checks if there are more classes to scrape
   while (tbody.querySelector("tr:nth-child(" + i + ")")) {
     // Finds the name of the class
-    var coursename = tbody.querySelector("tr:nth-child("+i+") > td:nth-child(1)").innerHTML;
+    var coursename = tbody.querySelector("tr:nth-child("+i+") > td:nth-child(1)").innerHTML.replace("&", " ");
     // Checks if the class should be included in the schedule
     if (!(coursename === "CLASS DEANS' EMAIL" || coursename.includes("ASSEM")
         || coursename.includes("CHAPEL") || coursename.includes("CITIZENSHIP") ||
